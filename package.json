@@ -5,17 +5,21 @@
   "keywords": [],
   "homepage": "https://codesandbox.io/s/new",
   "main": "src/index.js",
+  "devDependencies": {
+    "babel-core": "^6.21.0",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-react": "^6.16.0",
+    "html-webpack-plugin": "^2.26.0",
+    "webpack": "^1.14.0"
+  },
   "dependencies": {
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
-    "react-scripts": "1.1.0",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "webpack-dev-server": "^1.16.2",
     "axios": "0.17.1"
   },
-  "devDependencies": {},
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "webpack-dev-server"
   }
 }

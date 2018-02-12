@@ -1,10 +1,10 @@
-import React from "react";
-import { render } from "react-dom";
+import React, { PropTypes } from "react";
+import axios from "axios";
 
 // Contaner Component
 // Todo Id
 window.id = 0;
-class TodoApp extends React.Component {
+export default class TodoApp extends React.Component {
   constructor(props) {
     // Pass props to parent class
     super(props);
@@ -58,7 +58,6 @@ class TodoApp extends React.Component {
     );
   }
 }
-render(<TodoApp />, document.getElementById("container"));
 
 const Title = ({ todoCount }) => {
   return (
