@@ -1,10 +1,11 @@
 import React, { PropTypes } from "react";
 import axios from "axios";
-import { camelCase } from '../utility/helpers.js' 
+import { camelCase } from '../utility/helpers.js';
+import Title from './Title.jsx';
+import TodoForm from './TodoForm.jsx';
+import TodoList from './TodoList.jsx';
 
 // Contaner Component
-// Todo Id
-window.id = 0;
 export default class TodoApp extends React.Component {
   constructor(props) {
     // Pass props to parent class
@@ -19,7 +20,6 @@ export default class TodoApp extends React.Component {
   componentDidMount() {
     // Make HTTP reques with Axios
     axios.get(this.apiUrl).then(res => {
-      debugger;
       // Set state with result
       this.setState({ data: res.data.todo });
       console.log(this.state)
@@ -72,62 +72,3 @@ export default class TodoApp extends React.Component {
   }
 }
 
-const Title = ({ todoCount }) => {
-  return (
-    <div>
-      <div>
-        <h1>To-Do ({todoCount})</h1>
-      </div>
-    </div>
-  );
-};
-
-const TodoForm = ({ addTodo }) => {
-  // Input Tracker
-  let input;
-  // Return JSX
-  return (
-    <form
-      onSubmit={e => {
-        e.preventDefault();
-        addTodo(input.value);
-        input.value = "";
-      }}
-    >
-      <input
-        className="form-control col-md-12"
-        ref={node => {
-          input = node;
-        }}
-      />
-      <br />
-    </form>
-  );
-};
-
-const Todo = ({ todo, remove }) => {
-  // Each Todo
-  return (
-    <a
-      href="#"
-      className="list-group-item"
-      onClick={() => {
-        remove(todo.name);
-      }}
-    >
-      {todo.displayName}
-    </a>
-  );
-};
-
-const TodoList = ({ todos, remove }) => {
-  // Map through the todos
-  const todoNode = todos.map(todo => {
-    return <Todo todo={todo} key={todo.name} remove={remove} />;
-  });
-  return (
-    <div className="list-group" style={{ marginTop: "30px" }}>
-      {todoNode}
-    </div>
-  );
-};
