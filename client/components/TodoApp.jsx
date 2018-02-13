@@ -14,14 +14,15 @@ export default class TodoApp extends React.Component {
     this.state = {
       data: []
     };
-    this.apiUrl = "http://demo3719639.mockable.io/todos";
+    this.apiUrl = "http://localhost:6999/todos";
   }
   // Lifecycle method
   componentDidMount() {
     // Make HTTP reques with Axios
     axios.get(this.apiUrl).then(res => {
       // Set state with result
-      this.setState({ data: res.data.todo });
+      debugger;
+      this.setState({ data: res.data });
       console.log(this.state)
     });
   }
@@ -31,14 +32,14 @@ export default class TodoApp extends React.Component {
     const todo = { name: camelCase(val), displayName: val };
 
     // Update Data
-    this.state.data.push(todo);
-    this.setState({ data: this.state.data });
+    // this.state.data.push(todo);
+    // this.setState({ data: this.state.data });
 
     // Update data
-    // axios.post(this.apiUrl, todo).then(res => {
-    //   this.state.data.push(res.data);
-    //   this.setState({ data: this.state.data });
-    // });
+    axios.post(this.apiUrl, todo).then(res => {
+      this.state.data.push(todo);
+      this.setState({ data: this.state.data });
+    });
   }
   // Handle remove
   handleRemove(name) {
@@ -46,11 +47,11 @@ export default class TodoApp extends React.Component {
     const remainder = this.state.data.filter(todo => {
       if (todo.name !== name) return todo;
     });
-    this.setState({ data: remainder });
+    // this.setState({ data: remainder });
     // Update state with filter
-    // axios.delete(this.apiUrl + "/" + id).then(res => {
-    //   this.setState({ data: remainder });
-    // });
+    axios.delete(this.apiUrl + "/" + name).then(res => {
+      this.setState({ data: remainder });
+    });
   }
 
   render() {
