@@ -1,9 +1,9 @@
 import React, { PropTypes } from "react";
 import axios from "axios";
 import { camelCase } from '../utility/helpers.js';
-import Title from './Title.jsx';
-import TodoForm from './TodoForm.jsx';
-import TodoList from './TodoList.jsx';
+import Title from './todoApp/Title.jsx';
+import TodoForm from './todoApp/TodoForm.jsx';
+import TodoList from './todoApp/TodoList.jsx';
 
 // Contaner Component
 export default class TodoApp extends React.Component {
