@@ -7,7 +7,7 @@ const TodoList = ({ todos, remove }) => {
       return <Todo todo={todo} key={todo.name} remove={remove} />;
     });
     return (
-      <div className="list-group" style={{ marginTop: "30px" }}>
+      <div className="list-group">
         {todoNode}
       </div>
     );

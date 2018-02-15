@@ -1,9 +1,10 @@
 import React, { PropTypes } from "react";
 import axios from "axios";
-import { camelCase } from '../utility/helpers.js';
-import Title from './todoApp/Title.jsx';
-import TodoForm from './todoApp/TodoForm.jsx';
-import TodoList from './todoApp/TodoList.jsx';
+import { camelCase, searchList } from "../utility/helpers.js";
+import Title from "./todoApp/Title.jsx";
+import TodoForm from "./todoApp/TodoForm.jsx";
+import TodoList from "./todoApp/TodoList.jsx";
+import TodoSearch from "./todoApp/TodoSearch.jsx";
 
 // Contaner Component
 export default class TodoApp extends React.Component {
@@ -13,7 +14,9 @@ export default class TodoApp extends React.Component {
 
     // Set initial state
     this.state = {
-      data: []
+      data: [],
+      filteredData: [],
+      searchVal: ""
     };
     // TODO: Move this to configurable json
     this.apiUrl = "http://localhost:6999/todos";
@@ -24,8 +27,24 @@ export default class TodoApp extends React.Component {
     // Make HTTP reques with Axios
     axios.get(this.apiUrl).then(res => {
       // Set state with result
-      this.setState({ data: res.data });
+      this.setState({ data: res.data, filteredData: res.data });
     });
+  }
+
+  // Search Todos
+  searchTodo(event) {
+    const val = event.target.value;
+    this.setState({
+      searchVal: val
+    });
+    if (val.length !== 0) {
+      var list = this.state.data;
+      var filteredList = searchList(list, val);
+      this.state.filteredData = filteredList;
+      this.setState({ filteredData: this.state.filteredData });
+    } else {
+      this.setState({ filteredData: this.state.data });
+    }
   }
 
   // Add todo handler
@@ -36,7 +55,7 @@ export default class TodoApp extends React.Component {
     // Update data
     axios.post(this.apiUrl, todo).then(res => {
       this.state.data.push(todo);
-      this.setState({ data: this.state.data });
+      this.setState({ data: this.state.data, filteredData: this.state.data });
     });
   }
 
@@ -49,7 +68,12 @@ export default class TodoApp extends React.Component {
     // this.setState({ data: remainder });
     // Update state with filter
     axios.delete(this.apiUrl + "/" + name).then(res => {
-      this.setState({ data: remainder });
+      this.setState({
+        data: remainder,
+        filteredData: this.state.searchVal.length
+          ? searchList(remainder, this.state.searchVal)
+          : remainder
+      });
     });
   }
 
@@ -59,16 +83,34 @@ export default class TodoApp extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-lg-8">
-            <Title todoCount={this.state.data.length} />
-            <TodoForm addTodo={this.addTodo.bind(this)} />
-            <TodoList
-              todos={this.state.data}
-              remove={this.handleRemove.bind(this)}
-            />
+            <div className="row">
+              <Title todoCount={this.state.filteredData.length} />
+            </div>
+            <div className="row">
+              <div className="col-lg-8">
+                <TodoForm addTodo={this.addTodo.bind(this)} />
+              </div>
+              <div className="col-lg-4">
+                <TodoSearch searchTodo={this.searchTodo.bind(this)} />
+              </div>
+            </div>
+            <div className="row">
+              {(() => {
+                if (this.state.filteredData.length) {
+                  return (
+                    <TodoList
+                      todos={this.state.filteredData}
+                      remove={this.handleRemove.bind(this)}
+                    />
+                  );
+                } else {
+                  return <h3 className="alert-danger">No Data</h3>;
+                }
+              })()}
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
-
