@@ -10,30 +10,28 @@ export default class TodoApp extends React.Component {
   constructor(props) {
     // Pass props to parent class
     super(props);
+
     // Set initial state
     this.state = {
       data: []
     };
+    // TODO: Move this to configurable json
     this.apiUrl = "http://localhost:6999/todos";
   }
+
   // Lifecycle method
   componentDidMount() {
     // Make HTTP reques with Axios
     axios.get(this.apiUrl).then(res => {
       // Set state with result
-      debugger;
       this.setState({ data: res.data });
-      console.log(this.state)
     });
   }
+
   // Add todo handler
   addTodo(val) {
     // Assemble data
     const todo = { name: camelCase(val), displayName: val };
-
-    // Update Data
-    // this.state.data.push(todo);
-    // this.setState({ data: this.state.data });
 
     // Update data
     axios.post(this.apiUrl, todo).then(res => {
@@ -41,6 +39,7 @@ export default class TodoApp extends React.Component {
       this.setState({ data: this.state.data });
     });
   }
+
   // Handle remove
   handleRemove(name) {
     // Filter all todos except the one to be removed
